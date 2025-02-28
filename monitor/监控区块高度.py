@@ -3,7 +3,6 @@ from web3 import AsyncWeb3, WebSocketProvider
 from web3.utils.subscriptions import (
     NewHeadsSubscription,
     NewHeadsSubscriptionContext,
-    LogsSubscription,
 )
 
 # -- declare handlers --
