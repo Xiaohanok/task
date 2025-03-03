@@ -39,7 +39,7 @@ contract TokenBank {
         myPermit.permitTransferFrom(permit, transferDetails, from, signature);
 
         // 更新用户的存款余额
-        balances[msg.sender] += amount;
+        balances[from] += amount;
     }
 
     // 提款函数
