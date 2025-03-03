@@ -2,12 +2,12 @@
 pragma solidity ^0.8.0;
 
 import {MyToken} from "./Mytoken.sol";
-import {Permit2} from "../src/Permit2.sol";
+import {IPermit2} from "../src/interfaces/IPermit2.sol";
 import {ISignatureTransfer} from "../src/interfaces/ISignatureTransfer.sol";
 
 contract TokenBank {
     MyToken public token;
-    Permit2 public myPermit;
+    IPermit2 public myPermit;
 
     // 存款者的余额记录
     mapping(address => uint256) public balances;
@@ -15,7 +15,7 @@ contract TokenBank {
     // 设置合约中的 ERC20 代币地址
     constructor(address tokenAddress, address Permit2address) {
         token = MyToken(tokenAddress);
-        myPermit = Permit2(Permit2address);
+        myPermit = IPermit2(Permit2address);
     }
 
     function getTransferDetails(address to, uint256 amount)
