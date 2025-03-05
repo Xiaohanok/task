@@ -11,10 +11,11 @@ contract NFTMarket  {
     string  public constant name     = "Nft list";
     string  public constant version  = "1";
     bytes32 public  DOMAIN_SEPARATOR = keccak256(abi.encode(
-    keccak256("EIP712Domain(string name,string version,address ver)"),
+    keccak256("EIP712Domain(string name,string version,address ver,uint256 chainid)"),
         keccak256(bytes(name)),
         keccak256(bytes(version)),
-        address(this)
+        address(this),
+        11155111
     ));
     bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address nft,uint256 id,address paytoken,uint256 price)");
 
