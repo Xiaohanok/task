@@ -50,7 +50,7 @@ contract NFTMarketV2Test is Test {
         nft.approve(address(market), tokenId);
 
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),ETH_FLAG, tokenId,1 ether));
-        DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver)"),keccak256(bytes("Nft list")),keccak256(bytes(version)),address(market)
+        DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver,uint256 chainid)"),keccak256(bytes("Nft list")),keccak256(bytes(version)),address(market),11155111
     ));
         // 3. 签名购买信息
         bytes32 digest =keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR1,structHash));
@@ -91,7 +91,7 @@ contract NFTMarketV2Test is Test {
 
         // 3. 签名上架信息
         bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),address(mockToken),tokenId, 1 ether));
-        DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver)"), keccak256(bytes("Nft list")), keccak256(bytes(version)), address(market)));
+        DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver,uint256 chainid)"), keccak256(bytes("Nft list")), keccak256(bytes(version)), address(market),11155111));
         
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR1, structHash));
 
