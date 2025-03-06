@@ -17,7 +17,7 @@ contract NFTMarket  {
         address(this),
         11155111
     ));
-    bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address nft,uint256 id,address paytoken,uint256 price)");
+    bytes32 public constant PERMIT_TYPEHASH = keccak256("Sell(address nft,uint256 id,address paytoken,uint256 price)");
 
 
 
