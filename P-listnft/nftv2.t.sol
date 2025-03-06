@@ -23,7 +23,7 @@ contract NFTMarketV2Test is Test {
     address buy;
     bytes32 public  DOMAIN_SEPARATOR1;
     string  public constant version  = "1";
-    bytes32 public constant PERMIT_TYPEHASH = keccak256("Permit(address nft,uint256 id,address paytoken,uint256 price)");
+    bytes32 public constant PERMIT_TYPEHASH = keccak256("Sell(address nft,uint256 id,address paytoken,uint256 price)");
     address public constant ETH_FLAG = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
 
 
@@ -42,17 +42,17 @@ contract NFTMarketV2Test is Test {
 
     function testBuyWithETH() public {
 
-         // 1. 铸造 NFT
+         //  铸造 NFT
         string memory tokenURI = "https://example.com/token/0";
         uint256 tokenId = nft.awardItem(sell, tokenURI);
         console.log(tokenId);
         vm.startPrank(sell);
         nft.approve(address(market), tokenId);
 
-        bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),ETH_FLAG, tokenId,1 ether));
+        bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),ETH_FLAG, tokenId,1 ether,0));
         DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver,uint256 chainid)"),keccak256(bytes("Nft list")),keccak256(bytes(version)),address(market),11155111
     ));
-        // 3. 签名购买信息
+        //  签名购买信息
         bytes32 digest =keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR1,structHash));
                         
  
@@ -61,12 +61,12 @@ contract NFTMarketV2Test is Test {
          // 记录卖家购买前的 ETH 余额
         uint256 initialBalance = address(sell).balance;
 
-        // 4. 用户购买 NFT
+        // 用户购买 NFT
         vm.startPrank(buy); // 设置用户为调用者
         market.buy{value: 1 ether}(address(nft), tokenId, market.ETH_FLAG(), 1 ether, v, r, s);
         vm.stopPrank();
 
-                // 5. 验证用户是否成功购买了 NFT
+        //  验证用户是否成功购买了 NFT
         assertEq(nft.ownerOf(tokenId), buy);
         uint256 finalBalance = address(sell).balance;
         assertEq(finalBalance, initialBalance + 1 ether); // 验证卖家没有收到 ETH，因为是用 ERC20 购买
@@ -74,23 +74,23 @@ contract NFTMarketV2Test is Test {
 
 
 
-        // 验证用户是否成功购买了 NFT
+        // 验证卖家是否收到eth
         // 例如：assertEq(IERC721(nftAddress).ownerOf(tokenId), user);
     }
 
     function testBuyWithERC20() public {
-        // 1. 铸造 NFT
+        // 铸造 NFT
         string memory tokenURI = "https://example.com/token/1";
         uint256 tokenId = nft.awardItem(sell, tokenURI);
         console.log(tokenId);
         
-        // 2. 用户批准市场合约使用其 ERC20 代币
+        // 用户批准市场合约使用其 nft 
         vm.startPrank(sell);
         nft.approve(address(market), tokenId); // 批准市场合约使用 NFT
 
 
-        // 3. 签名上架信息
-        bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),address(mockToken),tokenId, 1 ether));
+        // 签名上架信息
+        bytes32 structHash = keccak256(abi.encode(PERMIT_TYPEHASH, address(nft),address(mockToken),tokenId, 1 ether,0));
         DOMAIN_SEPARATOR1 = keccak256(abi.encode(keccak256("EIP712Domain(string name,string version,address ver,uint256 chainid)"), keccak256(bytes("Nft list")), keccak256(bytes(version)), address(market),11155111));
         
         bytes32 digest = keccak256(abi.encodePacked("\x19\x01", DOMAIN_SEPARATOR1, structHash));
@@ -108,10 +108,10 @@ contract NFTMarketV2Test is Test {
         market.buy{value: 0}(address(nft), tokenId, address(mockToken), 1 ether, v, r, s); // 使用 ERC20 代币购买
         vm.stopPrank();
 
-        // 5. 验证用户是否成功购买了 NFT
+        // 验证用户是否成功购买了 NFT
         assertEq(nft.ownerOf(tokenId), buy);
 
         uint256 finalBalance = mockToken.balanceOf(sell);
-        assertEq(finalBalance, initialBalance + 1 ether); // 验证卖家没有收到 ETH，因为是用 ERC20 购买
+        assertEq(finalBalance, initialBalance + 1 ether); // 验证卖家没有收到该ERC20 
     }
 }
