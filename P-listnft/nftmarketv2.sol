@@ -19,13 +19,15 @@ contract NFTMarket  {
     ));
     bytes32 public constant PERMIT_TYPEHASH = keccak256("Sell(address nft,uint256 id,address paytoken,uint256 price)");
 
+    mapping(address => uint256) public nonces;
+
 
 
 
 
     function buy(address nft,uint256 tokenId, address paytoken,uint256 price , uint8 v, bytes32 r, bytes32 s) public payable {
 
-        bytes32 digest =keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR,keccak256(abi.encode(PERMIT_TYPEHASH,nft,paytoken,tokenId,price))));
+        bytes32 digest =keccak256(abi.encodePacked("\x19\x01",DOMAIN_SEPARATOR,keccak256(abi.encode(PERMIT_TYPEHASH,nft,paytoken,tokenId,price,nonces[msg.sender]))));
         address signer = ecrecover(digest, v, r, s);
         require(IERC721(nft).ownerOf(tokenId) == signer, "wrong sign");
 
@@ -38,6 +40,7 @@ contract NFTMarket  {
             require(msg.value == 0, "MKT: wrong eth value");
             SafeERC20.safeTransferFrom(IERC20(paytoken), msg.sender, signer, price);
         }
+        nonces[msg.sender] += 1;
 
         IERC721(nft).safeTransferFrom(signer, msg.sender, tokenId);
         emit Sold(signer, msg.sender, price);
