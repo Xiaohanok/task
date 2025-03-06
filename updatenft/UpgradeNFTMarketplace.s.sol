@@ -8,11 +8,13 @@ import {NFTMarketplace} from "../src/NFTMarketplace.sol";
 
 contract UpgradeNFTMarketplace is Script {
     function run() external {
+        address proxyAddress = 0x0755bdC16cc821e0A34b00b39A4E0BD7971e1440;
 
         vm.startBroadcast();
 
         // 部署新逻辑合约
         NFTMarketplacV2 newImplementation = new NFTMarketplacV2();
+        NFTMarketplace(proxyAddress).upgradeTo(address(newImplementation));
 
 
         vm.stopBroadcast();
