@@ -1,11 +1,12 @@
 代理合约0x0755bdC16cc821e0A34b00b39A4E0BD7971e1440
+
 nft实现合约0x83a5226DE71320d9C3F7CDA9572AE5413D7687e2
 
 nft实现升级合约0x487537e94F057C1FA9e5146452D5474736608a9d
 
- ABI for the implementation contract at 0x487537e94f057c1fa9e5146452d5474736608a9d, using the EIP-1967 Transparent Proxy pattern.
+ABI for the implementation contract at 0x487537e94f057c1fa9e5146452d5474736608a9d, using the EIP-1967 Transparent Proxy pattern.
 Previously recorded to be on 0x83a5226de71320d9c3f7cda9572ae5413d7687e2.
-Learn more about proxy contracts in our Knowledge Base 
+Learn more about proxy contracts in our Knowledge Base
 
 https://sepolia.etherscan.io/address/0x0755bdC16cc821e0A34b00b39A4E0BD7971e1440#writeProxyContract
 代理合约地址
