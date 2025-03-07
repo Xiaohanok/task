@@ -32,7 +32,7 @@ contract Bank {
     }
 
     function withdraw(uint256 amount) public {
-        require(amount <= balanceOf[msg.sender], "Insufficient contract balance"); // 检查合约余额
+        require(amount <= balanceOf[msg.sender], "Insufficient  balance"); // 检查合约余额
         balanceOf[msg.sender] -= amount;
         if (balanceOf[msg.sender] == 0) {
             address pre = findPrevious(msg.sender);
@@ -106,19 +106,27 @@ contract Bank {
     }
 
 
-    function getTop10Users() external view returns (address[] memory, uint[] memory) {
-        
-        address[] memory users = new address[](10);
-        uint[] memory balances = new uint[](10);
-        
-        address current = NextAddress[GUARD];
-        for (uint256 i = 0; i < 10; i++) {
-            users[i] = current;
-            balances[i] = balanceOf[current];
-            current = NextAddress[current];
-        }
-        return (users, balances);
+function getTop10Users() external view returns (address[] memory, uint[] memory) {
+    address;
+    uint;
+    
+    address current = NextAddress[GUARD];
+    uint count = 0;
+
+    while (current != GUARD && count < 10) {
+        users[count] = current;
+        balances[count] = balanceOf[current];
+        current = NextAddress[current];
+        count++;
     }
+
+    assembly {
+        mstore(users, count)  // 修正返回数组的长度
+        mstore(balances, count)
+    }
+
+    return (users, balances);
+}
 
 
 }
