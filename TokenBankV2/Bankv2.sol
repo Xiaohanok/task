@@ -107,8 +107,7 @@ contract Bank {
 
 
 function getTop10Users() external view returns (address[] memory, uint[] memory) {
-    address;
-    uint;
+
     
     address current = NextAddress[GUARD];
     uint count = 0;
